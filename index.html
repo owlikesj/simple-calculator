@@ -1,0 +1,90 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:200" rel="stylesheet">
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Calulator -->
+        <div id="calculator" class="container">
+            <display></display>
+            <panel></panel>
+        </div>
+        <!-- Display template -->
+        <script type="text/x-template" id="display-template">
+            <div class="display">
+                <div class="expression">
+                    {{ expression }}
+                    <svg class="delete">
+                        <use xlink:href="#del-icon"></use>
+                    </svg>
+                </div>
+                <div class="answer">{{ answer }}</div>
+            </div>
+        </script>
+        <!-- Panel template -->
+        <script type="text/x-template" id="panel-template">
+            <div v-once class="panel">
+                <div v-for="line in inputs" class="panel-line">
+                    <div v-for="item in line" class="panel-item">
+                        <button v-if="item === '+/-'" class="panel-button" :value="item" @click="buttonAction">
+                            <svg class="plus-minus">
+                                <use xlink:href="#plus-minus-icon"></use>
+                            </svg>
+                        </button>
+                        <button v-else class="panel-button" :value="item" @click="buttonAction">{{ item }}</button>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
+        <script src="js/vendor/vue.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='https://www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-XXXXX-X','auto');ga('send','pageview');
+        </script>
+        <svg style="display:none">
+            <symbol id="del-icon" viewBox="0 0 55 42">
+                <path fill-rule="evenodd"  stroke="rgb(255, 255, 255)" stroke-width="2px" stroke-linecap="butt" stroke-linejoin="miter" fill="none"
+                d="M22.600,1.000 L45.000,1.000 C49.418,1.000 53.000,4.638 53.000,9.125 L53.000,31.875 C53.000,36.362 49.418,40.000 45.000,40.000 L22.600,40.000 C11.933,40.000 1.000,25.062 1.000,21.313 C1.000,16.395 11.933,1.000 22.600,1.000 Z"/>
+                <path fill-rule="evenodd"  stroke="rgb(255, 255, 255)" stroke-width="2px" stroke-linecap="butt" stroke-linejoin="miter" fill="none"
+                d="M25.800,10.750 L41.800,27.000 "/>
+                <path fill-rule="evenodd"  stroke="rgb(255, 255, 255)" stroke-width="2px" stroke-linecap="butt" stroke-linejoin="miter" fill="none"
+                d="M41.800,13.188 L25.800,29.438 "/>
+            <symbol>
+            <symbol id="plus-minus-icon" viewBox="0 0 47 44">
+                <path fill-rule="evenodd"  fill="rgb(255, 255, 255)"
+                d="M9.963,43.443 L12.362,43.443 L44.341,1.505 L41.941,1.505 "/>
+                <path fill-rule="evenodd"  fill="rgb(255, 255, 255)"
+                d="M11.516,9.357 L11.516,0.007 L9.916,0.007 L9.916,9.357 L0.566,9.357 L0.566,11.057 L9.916,11.057 L9.916,20.407 L11.516,20.407 L11.516,11.057 L20.865,11.057 L20.865,9.357 L11.516,9.357 Z"/>
+                <path fill-rule="evenodd"  fill="rgb(255, 255, 255)"
+                d="M31.564,38.364 L46.058,38.364 L46.058,36.664 L31.564,36.664 L31.564,38.364 Z"/>
+            </symbol>
+        </svg>
+    </body>
+</html>
