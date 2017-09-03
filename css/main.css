@@ -321,7 +321,9 @@ html, body {
             justify-content: space-between;
 }
 .expression {
-    line-height: 1;
+    font-size: 18px;
+    height: 18px;
+    line-height: 18px;
     background: #22262f;
     padding: 8px 5px 5px;
 }
@@ -337,6 +339,7 @@ html, body {
     text-align: right;
 }
 .panel {
+    position: relative;
     background: #494e58;
 }
 .panel-line {
@@ -359,6 +362,9 @@ html, body {
     border-right: none;
     background: #42464f;
 }
+.panel-item--dark {
+    background: #42464f;
+}
 .panel-button {
     background: transparent;
     border: none;
@@ -370,4 +376,9 @@ html, body {
 .plus-minus {
     width: 24px;
     height: 22px;
+}
+.panel-more {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
 }

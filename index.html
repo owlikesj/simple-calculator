@@ -30,7 +30,7 @@
             <div class="display">
                 <div class="expression">
                     {{ expression }}
-                    <svg class="delete">
+                    <svg v-show="expression" class="delete" @click="clearEnter">
                         <use xlink:href="#del-icon"></use>
                     </svg>
                 </div>
@@ -39,15 +39,15 @@
         </script>
         <!-- Panel template -->
         <script type="text/x-template" id="panel-template">
-            <div v-once class="panel">
-                <div v-for="line in inputs" class="panel-line">
-                    <div v-for="item in line" class="panel-item">
+            <div class="panel">
+                <div v-for="line in buttons" class="panel-line">
+                    <div v-for="item in line" class="panel-item" :class="{'panel-item--dark': showMore && item.more}">
                         <button v-if="item === '+/-'" class="panel-button" :value="item" @click="buttonAction">
                             <svg class="plus-minus">
                                 <use xlink:href="#plus-minus-icon"></use>
                             </svg>
                         </button>
-                        <button v-else class="panel-button" :value="item" @click="buttonAction">{{ item }}</button>
+                        <button v-else class="panel-button" :value="getButtonContent(item)" @click="buttonAction">{{ getButtonContent(item) }}</button>
                     </div>
                 </div>
             </div>
