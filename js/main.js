@@ -4,6 +4,37 @@ function isNumber (str) {
   return typeof str === 'string' && /^-?(\d+\.?\d*|\.\d+)$/.test(str)
 }
 
+function fixFloatCalculation (o, a, b) {
+  const aa = String(a).split('.')
+  const bb = String(b).split('.')
+  if (aa[1] || bb[1]) {
+    const al = aa[1] ? aa[1].length : 0
+    const bl = bb[1] ? bb[1].length : 0
+    const m = Math.pow(10, Math.max(al, bl))
+    switch (o) {
+      case '+':
+        return (a * m + b * m) / m
+      case '-':
+        return (a * m - b * m) / m
+      case '×':
+        return (a * m) * (b * m) / (m * m)
+      case '÷':
+        return (a * m) / (b * m)
+    }
+  } else {
+    switch (o) {
+      case '+':
+        return a + b
+      case '-':
+        return a - b
+      case '×':
+        return a * b
+      case '÷':
+        return a / b
+    }
+  }
+}
+
 function compute (arr) {
   arr = [].concat(arr)
   if (arr.length <= 1) {
@@ -38,13 +69,13 @@ function compute (arr) {
           left.push('+')
           break
         }
-        return compute(left) + compute(right)
+        return fixFloatCalculation('+', compute(left), compute(right))
       case '-':
         if (parentheseDiff) {
           left.push('-')
           break
         }
-        return compute(left) - compute(right)
+        return fixFloatCalculation('-', compute(left), compute(right))
       default:
         left.push(item)
     }
@@ -65,13 +96,13 @@ function compute (arr) {
           right.unshift('×')
           break
         }
-        return compute(left) * compute(right)
+        return fixFloatCalculation('×', compute(left), compute(right))
       case '÷':
         if (parentheseDiff) {
           right.unshift('÷')
           break
         }
-        return compute(left) / compute(right)
+        return fixFloatCalculation('÷', compute(left), compute(right))
       default:
         right.unshift(item)
     }
