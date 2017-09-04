@@ -149,7 +149,7 @@ Vue.component('display', {
         case '=':
           this.computeAnswer()
           return
-        case '+/-':
+        case '±':
           if (!lastItem) {
             items.push(this.answer >= 0 ? '-' + this.answer : -this.answer + '')
             return
@@ -222,6 +222,19 @@ Vue.component('display', {
         this.items.push(lastItem.slice(0, -1))
       }
     }
+  },
+  filters: {
+    short (answer, length) {
+      if (!isFinite(answer) || String(answer).length <= length) {
+        return answer
+      }
+      answer = answer.toPrecision(length - 3)
+      let [mantissa, exponent] = String(answer).split('e')
+      if (mantissa.length + exponent.length + 1 > length) {
+        answer = mantissa.substr(0, length - 1 - exponent.length) + 'e' + exponent
+      }
+      return answer
+    }
   }
 })
 
@@ -231,11 +244,11 @@ Vue.component('panel', {
     return {
       showMore: false,
       buttons: [
-        ['C', '+/-', '%', '÷'],
+        ['C', '±', '%', '÷'],
         ['7', '8', '9', '+'],
         [{main: '4', more: '('}, '5', '6', '-'],
         [{main: '1', more: ')'}, '2', '3', '×'],
-        [{main: '...', more: 'v'}, '0', '.', '=']
+        [{main: '...', more: '⏎'}, '0', '.', '=']
       ]
     }
   },
@@ -249,7 +262,7 @@ Vue.component('panel', {
         case '...':
           this.showMore = true
           break
-        case 'v':
+        case '⏎':
           this.showMore = false
           break
         default:
@@ -262,3 +275,18 @@ Vue.component('panel', {
 new Vue({
   el: '#calculator'
 })
+
+// 暴力解决iOS10 Safari不识别viewport禁用缩放
+document.documentElement.addEventListener('touchstart', function (event) {
+  if (event.touches.length > 1) {
+    event.preventDefault()
+  }
+}, false)
+var lastTouchEnd = 0
+document.documentElement.addEventListener('touchend', function (event) {
+  var now = Date.now()
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault()
+  }
+  lastTouchEnd = now
+}, false)

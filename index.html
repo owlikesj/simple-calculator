@@ -5,15 +5,15 @@
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title></title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
 
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
-        <link href="https://fonts.googleapis.com/css?family=Montserrat:200" rel="stylesheet">
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -30,11 +30,9 @@
             <div class="display">
                 <div class="expression">
                     {{ expression }}
-                    <svg v-show="expression" class="delete" @click="clearEnter">
-                        <use xlink:href="#del-icon"></use>
-                    </svg>
+                    <span v-show="expression" class="delete" @click="clearEnter">✗</span>
                 </div>
-                <div class="answer">{{ answer }}</div>
+                <div class="answer">{{ answer | short(10) }}</div>
             </div>
         </script>
         <!-- Panel template -->
@@ -43,12 +41,7 @@
                 <div v-for="line in buttons" class="panel-line">
                     <div v-for="item in line" class="panel-item">
                         <transition name="rotate" mode="out-in">
-                            <button v-if="item === '+/-'" class="panel-button" :value="item" :key="getButtonContent(item)" @click="buttonAction">
-                                <svg class="plus-minus">
-                                    <use xlink:href="#plus-minus-icon"></use>
-                                </svg>
-                            </button>
-                            <button v-else class="panel-button" :class="{'panel-button--dark': showMore && item.more}" :value="getButtonContent(item)" :key="getButtonContent(item)" @click="buttonAction">{{ getButtonContent(item) }}</button>
+                            <button class="panel-button" :class="{'panel-button--dark': showMore && item.more, 'panel-button-more': getButtonContent(item) === '...'}" :value="getButtonContent(item)" :key="getButtonContent(item)" @click="buttonAction"><span>{{ getButtonContent(item) }}</span></button>
                         </transition>
                     </div>
                 </div>
@@ -79,14 +72,11 @@
                 <path fill-rule="evenodd"  stroke="rgb(255, 255, 255)" stroke-width="2px" stroke-linecap="butt" stroke-linejoin="miter" fill="none"
                 d="M41.800,13.188 L25.800,29.438 "/>
             <symbol>
-            <symbol id="plus-minus-icon" viewBox="0 0 47 44">
-                <path fill-rule="evenodd"  fill="rgb(255, 255, 255)"
-                d="M9.963,43.443 L12.362,43.443 L44.341,1.505 L41.941,1.505 "/>
-                <path fill-rule="evenodd"  fill="rgb(255, 255, 255)"
-                d="M11.516,9.357 L11.516,0.007 L9.916,0.007 L9.916,9.357 L0.566,9.357 L0.566,11.057 L9.916,11.057 L9.916,20.407 L11.516,20.407 L11.516,11.057 L20.865,11.057 L20.865,9.357 L11.516,9.357 Z"/>
-                <path fill-rule="evenodd"  fill="rgb(255, 255, 255)"
-                d="M31.564,38.364 L46.058,38.364 L46.058,36.664 L31.564,36.664 L31.564,38.364 Z"/>
-            </symbol>
         </svg>
+        <script>
+            $(function() {
+              FastClick.attach(document.body)
+            })
+        </script>
     </body>
 </html>
