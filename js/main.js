@@ -146,6 +146,8 @@ Vue.component('display', {
         case '÷':
           if (!lastItem) {
             items.push(this.answer + '')
+          } else if (['+', '-', '×', '÷', '%'].includes(lastItem)) {
+            items.pop()
           }
           items.push(val)
           return
