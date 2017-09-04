@@ -41,13 +41,15 @@
         <script type="text/x-template" id="panel-template">
             <div class="panel">
                 <div v-for="line in buttons" class="panel-line">
-                    <div v-for="item in line" class="panel-item" :class="{'panel-item--dark': showMore && item.more}">
-                        <button v-if="item === '+/-'" class="panel-button" :value="item" @click="buttonAction">
-                            <svg class="plus-minus">
-                                <use xlink:href="#plus-minus-icon"></use>
-                            </svg>
-                        </button>
-                        <button v-else class="panel-button" :value="getButtonContent(item)" @click="buttonAction">{{ getButtonContent(item) }}</button>
+                    <div v-for="item in line" class="panel-item">
+                        <transition name="rotate" mode="out-in">
+                            <button v-if="item === '+/-'" class="panel-button" :value="item" :key="getButtonContent(item)" @click="buttonAction">
+                                <svg class="plus-minus">
+                                    <use xlink:href="#plus-minus-icon"></use>
+                                </svg>
+                            </button>
+                            <button v-else class="panel-button" :class="{'panel-button--dark': showMore && item.more}" :value="getButtonContent(item)" :key="getButtonContent(item)" @click="buttonAction">{{ getButtonContent(item) }}</button>
+                        </transition>
                     </div>
                 </div>
             </div>
