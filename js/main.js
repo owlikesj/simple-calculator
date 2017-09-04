@@ -53,7 +53,7 @@ function compute (arr) {
   while (item = right.shift()) {
     switch (item) {
       case '%':
-        left.push('/')
+        left.push('÷')
         left.push('100')
         break
       case '(':
@@ -240,7 +240,10 @@ Vue.component('display', {
       if (!isFinite(answer) || String(answer).length <= length) {
         return answer
       }
-      answer = answer.toPrecision(length - 3)
+      answer = String(answer.toPrecision(length))
+      if (!answer.includes('e')) {
+        return answer.substr(0, length)
+      }
       let [mantissa, exponent] = String(answer).split('e')
       if (mantissa.length + exponent.length + 1 > length) {
         answer = mantissa.substr(0, length - 1 - exponent.length) + 'e' + exponent
@@ -302,3 +305,8 @@ document.documentElement.addEventListener('touchend', function (event) {
   }
   lastTouchEnd = now
 }, false)
+
+module.exports = {
+  fixFloatCalculation,
+  compute
+}
