@@ -120,7 +120,7 @@ Vue.component('display', {
   },
   computed: {
     expression () {
-      return this.items.join(' ')
+      return this.items.join('')
     },
     parentheseDiff () {
       return this.items.reduce((acc, val) => {
@@ -161,6 +161,16 @@ Vue.component('display', {
             items.push('-' + lastItem)
           }
           return
+        case '%':
+          if (!lastItem) {
+            items.push(this.answer)
+            return
+          }
+          if (!isNumber(lastItem)) {
+            items.pop()
+          }
+          items.push('%')
+          return
         case '.':
           if (isNumber(lastItem) && !lastItem.includes('.')) {
             items.pop()
@@ -187,7 +197,9 @@ Vue.component('display', {
           return
         default:
           if ((lastItem === '.' || isNumber(lastItem)) && isNumber(val)) {
-            if (lastItem === '0' && val === '0') {
+            if (lastItem === '0') {
+              items.pop()
+              items.push(val)
               return
             }
             items.pop()
