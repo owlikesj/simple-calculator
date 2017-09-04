@@ -49,33 +49,31 @@ function compute (arr) {
         left.push(item)
     }
   }
-  right = left
-  left = []
   parentheseDiff = 0
-  while (item = right.shift()) {
+  while (item = left.pop()) {
     switch (item) {
-      case '(':
-        parentheseDiff++
-        left.push(item)
-        break
       case ')':
+        parentheseDiff++
+        right.unshift(item)
+        break
+      case '(':
         parentheseDiff--
-        left.push(item)
+        right.unshift(item)
         break
       case '×':
         if (parentheseDiff) {
-          left.push('×')
+          right.unshift('×')
           break
         }
         return compute(left) * compute(right)
       case '÷':
         if (parentheseDiff) {
-          left.push('÷')
+          right.unshift('÷')
           break
         }
         return compute(left) / compute(right)
       default:
-        left.push(item)
+        right.unshift(item)
     }
   }
   console.log('Illegal formula')
@@ -122,7 +120,7 @@ Vue.component('display', {
           return
         case '+/-':
           if (!lastItem) {
-            items.push('-' + this.answer)
+            items.push(this.answer >= 0 ? '-' + this.answer : -this.answer + '')
             return
           }
           items.pop()
