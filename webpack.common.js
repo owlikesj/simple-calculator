@@ -1,16 +1,10 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
   entry: {
-    plugins: './js/plugins.js',
     main: './js/main.js'
-  },
-  devtool: 'inline-source-map',
-  devServer: {
-    contentBase: './dist'
   },
   output: {
     filename: '[name].js',
@@ -23,6 +17,15 @@ module.exports = {
   },
   module: {
     rules: [{
+      test: /\.js$/,
+      exclude: /(node_modules|bower_components)/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['env']
+        }
+      }
+    }, {
       test: /\.css$/,
       use: [
         'style-loader',
@@ -41,7 +44,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Calculator',
       template: 'index.html'
-    }),
-    new webpack.HotModuleReplacementPlugin()
+    })
   ]
 }
