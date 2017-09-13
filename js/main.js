@@ -73,6 +73,9 @@ Vue.component('display', {
           if (isNumber(lastItem) && !lastItem.includes('.')) {
             items.pop()
             items.push(lastItem + '.')
+          } else if (lastItem === '%') {
+            items.pop()
+            items.push('.')
           } else {
             items.push('.')
           }
@@ -83,7 +86,7 @@ Vue.component('display', {
         case '÷':
           if (!lastItem) {
             items.push(this.answer + '')
-          } else if (['+', '-', '×', '÷', '%'].includes(lastItem)) {
+          } else if (['+', '-', '×', '÷'].includes(lastItem)) {
             items.pop()
           }
           items.push(val)
