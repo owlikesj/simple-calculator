@@ -55,8 +55,10 @@ Vue.component('display', {
           items.pop()
           if (isNumber(lastItem) && lastItem[0] === '-') {
             items.push(lastItem.slice(1))
-          } else {
+          } else if (isNumber(lastItem)) {
             items.push('-' + lastItem)
+          } else {
+            items.push(lastItem)
           }
           return
         case '%':
@@ -91,13 +93,23 @@ Vue.component('display', {
           }
           items.push(val)
           return
+        case '(':
+          if (lastItem && (isNumber(lastItem) || lastItem === '.' || lastItem === '%')) {
+            return
+          }
+          items.push(val)
+          return
         case ')':
           if (this.parentheseDiff) {
             items.push(val)
           }
           return
         default:
-          if ((lastItem === '.' || isNumber(lastItem)) && isNumber(val)) {
+          if (lastItem === ')') {
+            if (isNumber(val) || val === '.') {
+
+            }
+          } else if ((lastItem === '.' || isNumber(lastItem)) && isNumber(val)) {
             if (lastItem === '0') {
               items.pop()
               items.push(val)
