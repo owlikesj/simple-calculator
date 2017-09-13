@@ -1,4 +1,4 @@
-import Expression from '../js/basic-expression'
+import Expression from '../js/expression'
 import assert from 'assert'
 
 function testAdd () {
@@ -26,9 +26,12 @@ function testParse () {
 }
 
 function testFloat () {
-  let str = '.1 + 0.2'
-  let e = Expression.parseString(str)
-  assert.equal(e.getResult(), 0.3, '0.1加0.2应该等于0.3')
+  let str1 = '.1 + 0.2'
+  let e1 = Expression.parseString(str1)
+  assert.equal(e1.getResult(), 0.3, '0.1加0.2应该等于0.3')
+  let str2 = '.01 ÷ .2'
+  let e2 = Expression.parseString(str2)
+  assert.equal(e2.getResult(), 0.05, '0.1除以0.2应该等于0.05')
 }
 
 testAdd()

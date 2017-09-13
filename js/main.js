@@ -1,114 +1,12 @@
-const bus = new Vue()
+import Vue from 'vue'
+import Expression from './expression'
+import '../css/main.css'
 
 function isNumber (str) {
   return typeof str === 'string' && /^-?(\d+\.?\d*|\.\d+)$/.test(str)
 }
 
-function fixFloatCalculation (o, a, b) {
-  const aa = String(a).split('.')
-  const bb = String(b).split('.')
-  if (aa[1] || bb[1]) {
-    const al = aa[1] ? aa[1].length : 0
-    const bl = bb[1] ? bb[1].length : 0
-    const m = Math.pow(10, Math.max(al, bl))
-    switch (o) {
-      case '+':
-        return (a * m + b * m) / m
-      case '-':
-        return (a * m - b * m) / m
-      case '×':
-        return (a * m) * (b * m) / (m * m)
-      case '÷':
-        return (a * m) / (b * m)
-    }
-  } else {
-    switch (o) {
-      case '+':
-        return a + b
-      case '-':
-        return a - b
-      case '×':
-        return a * b
-      case '÷':
-        return a / b
-    }
-  }
-}
-
-function compute (arr) {
-  arr = [].concat(arr)
-  if (arr.length <= 1) {
-    if (!isNumber(arr[0])) {
-      console.log('Illegal formula')
-    }
-    return +arr[0]
-  }
-  if (arr[0] === '(' && arr[arr.length - 1] === ')') {
-    return compute(arr.slice(1, -1))
-  }
-  let right = arr
-  let left = []
-  let parentheseDiff = 0
-  let item = ''
-  while (item = right.shift()) {
-    switch (item) {
-      case '%':
-        left.push('÷')
-        left.push('100')
-        break
-      case '(':
-        parentheseDiff++
-        left.push(item)
-        break
-      case ')':
-        parentheseDiff--
-        left.push(item)
-        break
-      case '+':
-        if (parentheseDiff) {
-          left.push('+')
-          break
-        }
-        return fixFloatCalculation('+', compute(left), compute(right))
-      case '-':
-        if (parentheseDiff) {
-          left.push('-')
-          break
-        }
-        return fixFloatCalculation('-', compute(left), compute(right))
-      default:
-        left.push(item)
-    }
-  }
-  parentheseDiff = 0
-  while (item = left.pop()) {
-    switch (item) {
-      case ')':
-        parentheseDiff++
-        right.unshift(item)
-        break
-      case '(':
-        parentheseDiff--
-        right.unshift(item)
-        break
-      case '×':
-        if (parentheseDiff) {
-          right.unshift('×')
-          break
-        }
-        return fixFloatCalculation('×', compute(left), compute(right))
-      case '÷':
-        if (parentheseDiff) {
-          right.unshift('÷')
-          break
-        }
-        return fixFloatCalculation('÷', compute(left), compute(right))
-      default:
-        right.unshift(item)
-    }
-  }
-  console.log('Illegal formula')
-}
+const bus = new Vue()
 
 Vue.component('display', {
   template: '#display-template',
@@ -221,7 +119,9 @@ Vue.component('display', {
       }
       try {
         // this.answer = eval(this.expression.replace(/×/g, '*').replace(/÷/g, '/').replace(/%/g, '/100'))
-        this.answer = compute(this.items)
+        this.answer = Expression
+          .parseString(this.expression)
+          .getResult()
       } catch (e) {
         this.answer = 'Error'
         console.log(e)
@@ -229,7 +129,7 @@ Vue.component('display', {
       this.items.push('=')
     },
     clearEnter () {
-      lastItem = this.items.pop()
+      let lastItem = this.items.pop()
       if (lastItem && lastItem.length > 1) {
         this.items.push(lastItem.slice(0, -1))
       }
@@ -305,8 +205,3 @@ document.documentElement.addEventListener('touchend', function (event) {
   }
   lastTouchEnd = now
 }, false)
-
-module.exports = {
-  fixFloatCalculation,
-  compute
-}

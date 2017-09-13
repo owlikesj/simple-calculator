@@ -84,7 +84,7 @@ function operandsNumOf (operator) {
   }
 }
 function str2expr (str) {
-  const illegal = /[^\s\d\.\+\-×÷%\(\)]+|([\.×÷%]\s*){2,}|([\+\-]\s*){3,}/
+  const illegal = /[^\s\d\.\+\-×÷%\(\)]+|([×÷%]\s*){2,}|([\+\-]\s*){3,}|\.\s*[\.\+\-×÷%\(\)]|[\+\-×÷\(\)]\s*%/
   const operRe = /[\+\-×÷%\(\)]|\d+\.?\d*|\.\d+/g
   const opers = str.match(operRe)
   if (illegal.test(str)) {
