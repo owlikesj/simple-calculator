@@ -1,4 +1,4 @@
-class BasicExpression {
+class Expression {
   constructor (operator, ...operands) {
     this.operator = operator
     this.operands = operands
@@ -36,7 +36,7 @@ class BasicExpression {
       return operands[0]
     }
     operands = operands.map(operand =>
-            operand instanceof BasicExpression
+            operand instanceof Expression
             ? operand.getResult() : operand)
     switch (operator) {
       case '+':
@@ -54,7 +54,7 @@ class BasicExpression {
 }
 
 function isValidOperand (operand) {
-  return typeof operand === 'number' || operand instanceof BasicExpression
+  return typeof operand === 'number' || operand instanceof Expression
 }
 function isValidOperator (operator) {
   return ['+', '-', '×', '÷', '%'].includes(operator)
@@ -125,7 +125,7 @@ function arr2expr (opers) {
     opers.pop()
   }
   if (opers.length === 1) {
-    return new BasicExpression('', parseFloat(opers[0]))
+    return new Expression('', parseFloat(opers[0]))
   }
   let left = opers
   let right = []
@@ -144,7 +144,7 @@ function arr2expr (opers) {
         if (isParentheseOpen || operandsNumOf(left[left.length - 1]) === 2) {
           right.unshift(item)
         } else {
-          return new BasicExpression(item,
+          return new Expression(item,
             left.length > 1 ? arr2expr(left) : parseFloat(left[0]),
             right.length > 1 ? arr2expr(right) : parseFloat(right[0]))
         }
@@ -168,7 +168,7 @@ function arr2expr (opers) {
         if (isParentheseOpen) {
           right.unshift(item)
         } else {
-          return new BasicExpression(item,
+          return new Expression(item,
             left.length > 1 ? arr2expr(left) : parseFloat(left[0]),
             right.length > 1 ? arr2expr(right) : parseFloat(right[0]))
         }
@@ -180,11 +180,11 @@ function arr2expr (opers) {
   let first = right[0]
   let last = right[right.length - 1]
   if (first === '+' || first === '-') {
-    return new BasicExpression(right.shift(),
+    return new Expression(right.shift(),
       right.length > 1 ? arr2expr(right) : parseFloat(right[0]))
   }
   if (last === '%') {
-    return new BasicExpression(right.pop(),
+    return new Expression(right.pop(),
       right.length > 1 ? arr2expr(right) : parseFloat(right[0]))
   }
 }
@@ -220,6 +220,6 @@ function fixFloatCalc (o, a, b) {
   }
 }
 
-BasicExpression.parseString = str2expr
+Expression.parseString = str2expr
 
-export default BasicExpression
+export default Expression

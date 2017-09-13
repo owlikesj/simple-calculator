@@ -7,7 +7,7 @@
     "doc": "doc"
   },
   "scripts": {
-    "test": "babel-node test/basic-expression.js",
+    "test": "babel-node test/expression.js",
     "build": "webpack"
   },
   "repository": {
