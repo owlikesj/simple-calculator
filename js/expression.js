@@ -143,7 +143,7 @@ function arr2expr (opers) {
         break
       case '+':
       case '-':
-        if (isParentheseOpen || operandsNumOf(left[left.length - 1]) === 2) {
+        if (isParentheseOpen || !left.length || operandsNumOf(left[left.length - 1]) === 2) {
           right.unshift(item)
         } else {
           return new Expression(item,

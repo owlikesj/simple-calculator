@@ -23,6 +23,9 @@ function testParse () {
   let result = 1 + (5 / 100 + 3) - 0.4 * 5 / 6
   assert.equal(Expression.parseString(longStr).getResult(),
     result, `${str}被解析成表达式对象计算结果得到${result}`)
+  let str2 = '-1 + 2'
+  let e2 = Expression.parseString(str2)
+  assert.equal(e2.getResult(), 1, '-1+2应该得到1')
 }
 
 function testFloat () {
