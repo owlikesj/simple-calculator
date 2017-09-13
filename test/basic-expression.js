@@ -20,11 +20,18 @@ function testParse () {
   let e = new BasicExpression('+', 1, 2)
   assert.deepEqual(BasicExpression.parseString(str), e, `${str}应该被解析成表达式对象${JSON.stringify(e)}`)
   let longStr = '1+(5%+3)-.4×5÷6'
-  let result = 1+(5/100+3)-.4*5/6
+  let result = 1 + (5 / 100 + 3) - 0.4 * 5 / 6
   assert.equal(BasicExpression.parseString(longStr).getResult(),
     result, `${str}被解析成表达式对象计算结果得到${result}`)
+}
+
+function testFloat () {
+  let str = '.1 + 0.2'
+  let e = BasicExpression.parseString(str)
+  assert.equal(e.getResult(), 0.3, '0.1加0.2应该等于0.3')
 }
 
 testAdd()
 testOne()
 testParse()
+testFloat()

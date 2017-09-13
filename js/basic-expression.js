@@ -28,25 +28,25 @@ class BasicExpression {
         throw `${JSON.stringify(operands[0])} is not a valid operand`
       }
     }
-    
   }
   getResult () {
+    const operator = this.operator
     let operands = this.operands
-    if (!this.operator) {
+    if (!operator) {
       return operands[0]
     }
     operands = operands.map(operand =>
             operand instanceof BasicExpression
             ? operand.getResult() : operand)
-    switch (this.operator) {
+    switch (operator) {
       case '+':
-        return operands[1] ? operands[0] + operands[1] : operands[0]
+        return operands[1] ? fixFloatCalc(operator, operands[0], operands[1]) : operands[0]
       case '-':
-        return operands[1] ? operands[0] - operands[1] : -operands[0]
+        return operands[1] ? fixFloatCalc(operator, operands[0], operands[1]) : -operands[0]
       case '×':
-        return operands[0] * operands[1]
+        return fixFloatCalc(operator, operands[0], operands[1])
       case '÷':
-        return operands[0] / operands[1]
+        return fixFloatCalc(operator, operands[0], operands[1])
       case '%':
         return operands[0] / 100
     }
@@ -83,7 +83,7 @@ function operandsNumOf (operator) {
       return [2]
   }
 }
-function str2expr(str) {
+function str2expr (str) {
   const illegal = /[^\s\d\.\+\-×÷%\(\)]+|([\.×÷%]\s*){2,}|([\+\-]\s*){3,}/
   const operRe = /[\+\-×÷%\(\)]|\d+\.?\d*|\.\d+/g
   const opers = str.match(operRe)
@@ -106,7 +106,7 @@ function str2expr(str) {
   }
   return arr2expr(str.match(operRe))
 }
-function arr2expr(opers) {
+function arr2expr (opers) {
   // Remove outer parenthese
   outer:
   while (opers[0] === '(' && opers[opers.length - 1] === ')') {
@@ -153,8 +153,8 @@ function arr2expr(opers) {
         right.unshift(item)
     }
   }
-  isParentheseOpen = 0;
   [left, right] = [right, left]
+  isParentheseOpen = 0
   while (item = left.pop()) {
     switch (item) {
       case ')':
@@ -186,6 +186,37 @@ function arr2expr(opers) {
   if (last === '%') {
     return new BasicExpression(right.pop(),
       right.length > 1 ? arr2expr(right) : parseFloat(right[0]))
+  }
+}
+
+function fixFloatCalc (o, a, b) {
+  const aa = String(a).split('.')
+  const bb = String(b).split('.')
+  if (aa[1] || bb[1]) {
+    const al = aa[1] ? aa[1].length : 0
+    const bl = bb[1] ? bb[1].length : 0
+    const m = Math.pow(10, Math.max(al, bl))
+    switch (o) {
+      case '+':
+        return (a * m + b * m) / m
+      case '-':
+        return (a * m - b * m) / m
+      case '×':
+        return (a * m) * (b * m) / (m * m)
+      case '÷':
+        return (a * m) / (b * m)
+    }
+  } else {
+    switch (o) {
+      case '+':
+        return a + b
+      case '-':
+        return a - b
+      case '×':
+        return a * b
+      case '÷':
+        return a / b
+    }
   }
 }
 
