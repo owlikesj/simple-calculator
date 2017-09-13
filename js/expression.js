@@ -135,9 +135,11 @@ function arr2expr (opers) {
     switch (item) {
       case ')':
         isParentheseOpen++
+        right.unshift(item)
         break
       case '(':
         isParentheseOpen--
+        right.unshift(item)
         break
       case '+':
       case '-':
@@ -159,9 +161,11 @@ function arr2expr (opers) {
     switch (item) {
       case ')':
         isParentheseOpen++
+        right.unshift(item)
         break
       case '(':
         isParentheseOpen--
+        right.unshift(item)
         break
       case '×':
       case '÷':

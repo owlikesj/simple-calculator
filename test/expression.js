@@ -34,7 +34,14 @@ function testFloat () {
   assert.equal(e2.getResult(), 0.05, '0.1除以0.2应该等于0.05')
 }
 
+function testParenthese () {
+  let str = '2 + (2 + 3) × 2'
+  let e = Expression.parseString(str)
+  assert.equal(e.getResult(), 12, '2+(2+3)×2应该等于12')
+}
+
 testAdd()
 testOne()
 testParse()
 testFloat()
+testParenthese()
