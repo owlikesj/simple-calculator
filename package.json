@@ -7,7 +7,7 @@
     "doc": "doc"
   },
   "scripts": {
-    "test": "babel-node test/expression.js",
+    "test": "babel-node nodeunit.js",
     "start": "webpack-dev-server --open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js"
   },
@@ -27,6 +27,7 @@
     "babel-preset-env": "^1.6.0",
     "clean-webpack-plugin": "^0.1.16",
     "css-loader": "^0.28.7",
+    "ejs": "^2.5.7",
     "file-loader": "^0.11.2",
     "html-webpack-plugin": "^2.30.1",
     "style-loader": "^0.18.2",
